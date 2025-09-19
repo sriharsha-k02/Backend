@@ -1,19 +1,16 @@
-# app.py
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import requests
 import re
 
 app = Flask(__name__)
-# Replace the origin with your GitHub Pages URL once you deploy the frontend
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": ["https://sriharsha-k02.github.io"]}})
 
 ZIP_CA_REGEX = re.compile(r"^[A-Za-z]\d[A-Za-z][\s-]?\d[A-Za-z]\d$")
 ZIP_US_REGEX = re.compile(r"^\d{5}(-\d{4})?$")
 
 def lookup_zip(zip_str: str):
     z = zip_str.strip()
-    # Decide country format (simple heuristic)
     if ZIP_CA_REGEX.match(z):
         country = "CA"
         q = z.replace(" ", "")
@@ -31,7 +28,7 @@ def lookup_zip(zip_str: str):
         data = r.json()
         place = data["places"][0]
         city = place["place name"]
-        region = place["state"] if country == "US" else place["state"]  # works for CA too
+        region = place["state"]
         return city, region, None
     except Exception as e:
         return None, None, "Lookup failed"
