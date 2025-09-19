@@ -49,3 +49,6 @@ def geo_lookup():
         return jsonify({"error": err}), 404
 
     return jsonify({"city": city, "region": region})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080)
